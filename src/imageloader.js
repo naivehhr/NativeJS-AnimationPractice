@@ -12,12 +12,12 @@ function loadImage(images, callback, timeout) {
   // 去不退票加载成功的标志位
   var success = true
   // 超时timer的id
-  var timoutID = 0;
+  var timeoutID = 0;
   // 是否加载超时的标志
   var isTimeout = false;
   // 对图片数组或对象进行遍历
   for(var key in images) {
-    if(!images.hasOwnproperty(key)){
+    if(!Object.prototype.hasOwnProperty.call(images, key)){
       continue;
     }
     //获得每个图片元素

@@ -1,0 +1,22 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naivehhr/NativeJS-AnimationPractice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naivehhr/NativeJS-AnimationPractice/issues"
+  },
+  "homepage": "https://github.com/naivehhr/NativeJS-AnimationPractice#readme",
+  "devDependencies": {
+    "webpack": "^1.12.11"
+  }
+}
