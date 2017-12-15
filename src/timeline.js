@@ -6,33 +6,39 @@ var requestAnimationFrame = (function () {
 		window.webkitRequestAnimationFrame ||
 		window.mozRequestAnimationFrame ||
 		window.oRequestAnimationFrame ||
+			//所有都不支持，用setTimeout兼容
 		function (callback) {
-			return window.setTimeout(callback, callback.interval || DEFAULT_INTERVAL)
-		}
+			return window.setTimeout(callback, (callback.interval || DEFAULT_INTERVAL)); // make interval as precise as possible.
+		};
 })();
 
 var cancelAnimationFrame = (function () {
 	return window.cancelAnimationFrame ||
 		window.webkitCancelAnimationFrame ||
-		window.mozCancelRequestAnimationFrame ||
-		window.oCancelRequestAnimationFrame ||
+		window.mozCancelAnimationFrame ||
+		window.oCancelAnimationFrame ||
 		function (id) {
-			return window.clearTimeout(id)
-		}
-})()
+			window.clearTimeout(id);
+		};
+})();
 
 
-// 初始化状态
+//初始化状态
 var STATE_INITIAL = 0;
-// 开始状态
+//开始状态
 var STATE_START = 1;
-// 停止状态
+//停止状态
 var STATE_STOP = 2;
 
+/**
+ * Timline时间轴类
+ * @constructor
+ */
 function Timeline() {
 	this.animationHandler = 0;
 	this.state = STATE_INITIAL;
 }
+
 
 /**
  * 时间轴上每一次回调执行的函数
@@ -47,26 +53,29 @@ Timeline.prototype.onenterframe = function (time) {
  * @param {*} interval 每一次回调的间隔时间
  */
 Timeline.prototype.start = function (interval) {
-	if (this.state === STATE_START) {
-		return
-	}
+	if (this.state === STATE_START)
+		return;
 	this.state = STATE_START;
-	this.interval = interval || DEFAULT_INTERVAL;
-	startTimeline(this, +new Date())
-}
 
-Timeline.prototype.restart = function() {
-	if(this.state === STATE_START) return
-	if(!this.dur || !this.interval) {
-		return
-	}
-	this.state = STATE_START
-	// 无缝连接动画
-	startTimeline(this, +new Date() - this.dur)
-}	
+	this.interval = interval || DEFAULT_INTERVAL;
+	startTimeline(this, +new Date());
+};
+
+
+Timeline.prototype.restart = function () {
+	if (this.state === STATE_START)
+		return;
+	if (!this.dur || !this.interval)
+		return;
+
+	this.state = STATE_START;
+
+	//无缝连接停止动画的状态
+	startTimeline(this, +new Date() - this.dur);
+};
 
 Timeline.prototype.stop = function() {
-	if(!this.state !== STATE_START) {
+	if(this.state !== STATE_START) { // 我去多打了一个！
 		return
 	}
 	this.state = STATE_STOP
@@ -77,6 +86,8 @@ Timeline.prototype.stop = function() {
 	cancelAnimationFrame(this.animationHandler)
 }
 
+
+
 /**
  * 时间轴动画启动函数
  * @param {*} timeline 时间轴实例 
@@ -85,6 +96,7 @@ Timeline.prototype.stop = function() {
 function startTimeline(timeline, startTime) {
 	timeline.startTime = startTime
 	nextTick.interval = timeline.interval;
+	nextTick();
 	//记录上一次回调的时间戳
 	var lastTick = + new Date()
 	/**

@@ -81,14 +81,14 @@ Animation.prototype.changeSrc = function (ele, imgList) {
   var len = imgList.length;
   var taskFn;
   var type;
-  if(len) {
+  if (len) {
     var me = this
-    taskFn = function(next, time) {
+    taskFn = function (next, time) {
       // 获得当前图片索引
       var index = Math.min(time / me.interval | 0, len - 1)
       //改变image对象的图片地址
       ele.src = imgList[index]
-      if(index === len - 1) {
+      if (index === len - 1) {
         next()
       }
     }
@@ -108,7 +108,7 @@ Animation.prototype.changeSrc = function (ele, imgList) {
  */
 Animation.prototype.enterFrame = function (taskFn) {
   // 这里啥时候执行?
-  return this._add(taskFn,TASK_ASYNC)
+  return this._add(taskFn, TASK_ASYNC)
 }
 
 /**
@@ -116,7 +116,7 @@ Animation.prototype.enterFrame = function (taskFn) {
  * @param {*} callback 回调函数
  */
 Animation.prototype.then = function (callback) {
-  var taskFn = function(next) {
+  var taskFn = function (next) {
     callback();
     next()
   }
@@ -149,15 +149,15 @@ Animation.prototype.start = function (interval) {
  */
 Animation.prototype.repeat = function (times) {
   var me = this
-  var taskFn = function() {
-    if(typeof times === 'undefined') {
+  var taskFn = function () {
+    if (typeof times === 'undefined') {
       // 无限回退到上一个任务
       // 怎么个无效回退的?
       me.index--;
       me._runTask();
       return;
     }
-    if(times) {
+    if (times) {
       times--;
       //回退
       me.index--
@@ -184,7 +184,7 @@ Animation.prototype.repeatForever = function () {
  * 暂停当前异步定时任务
  */
 Animation.prototype.wait = function () {
-  if(this.taskQueue && this.taskQueue.length > 0) {
+  if (this.taskQueue && this.taskQueue.length > 0) {
     // 在task上添加了一个wait属性
     this.taskQueue[this.taskQueue.length - 1].wait = time
   }
@@ -196,7 +196,7 @@ Animation.prototype.wait = function () {
  * 暂停当前异步定时任务
  */
 Animation.prototype.pause = function () {
-  if(this.state ===STATE_START) {
+  if (this.state === STATE_START) {
     this.state = STATE_STOP
     this.timeline.stop()
     return this // 这用单写？
@@ -208,7 +208,7 @@ Animation.prototype.pause = function () {
  * 重新执行上一次暂停的异步任务
  */
 Animation.prototype.restart = function () {
-  if(this.state === STATE_STOP) {
+  if (this.state === STATE_STOP) {
     this.state = STATE_START
     this.timeline.restart()
     return this
@@ -220,7 +220,7 @@ Animation.prototype.restart = function () {
  * 释放资源
  */
 Animation.prototype.dispose = function () {
-  if(this.state !== STATE_INITIAL) {
+  if (this.state !== STATE_INITIAL) {
     this.state = STATE_INITIAL
     this.taskQueue = null
     this.timeline.stop()
@@ -294,6 +294,7 @@ Animation.prototype._asyncTask = function (task) {
       // 执行下一个任务
       me._next(task)
     }
+    taskFn(next, time);
   }
   this.timeline.onenterframe = enterFrame
   this.timeline.start(this.interval)
@@ -304,10 +305,10 @@ Animation.prototype._asyncTask = function (task) {
  */
 Animation.prototype._next = function (task) {
   this.index++
-  var me = this 
-  task.wait? setTimeout(function(){
+  var me = this
+  task.wait ? setTimeout(function () {
     me._runTask
-  }, taskk.wait):this._runTask()
+  }, taskk.wait) : this._runTask()
 }
 
 

@@ -9,11 +9,10 @@ var positions = [
 ]
 var ele = document.getElementById('rabbit')
 var animationo = window.animation;
-// var repeatAnimaiton = animation().loadImage([imgUrl]).changePosition(
-// 	ele, positions, imgUrl
-// ).repeatForever();
+var repeatAnimaiton = animation().loadImage([imgUrl]).changePosition(
+	ele, positions, imgUrl
+).repeatForever();
 
-var repeatAnimaiton = animation()
 repeatAnimaiton.start(80)
 
 

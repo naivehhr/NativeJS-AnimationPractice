@@ -1,36 +1,24 @@
+var path = require('path');
+var version = require('./package.json').version;
+var webpack = require('webpack');
+
 module.exports = {
 	entry: {
-		// animation: './src/animation.js'
-		person: './src/doclass/person.js'
+		animation: './src/animation.js'
 	},
-	// output: {
-	// 	path: __dirname + '/build',
-	// 	filename: '[name].js',
-	// 	library: 'animation', // 会在window上对策一个animation对象
-	// 	libraryTarget: 'umd', // 支持AMD CMD等
-	// }
 	output: {
 		path: __dirname + '/build',
-		filename: '[name]webpack.js',
-		library: 'person', // 会在window上对策一个animation对象
-		libraryTarget: 'umd', // 支持AMD CMD等
+		filename: '[name].js',
+		library: 'animation',
+		libraryTarget: 'umd',
+		publicPath: '/assets/'
 	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader',
-					// 这里和在.babelrc中定义效果是一样的
-					// options: {
-					// 	presets: [
-					// 		"env",
-					// 		"stage-2"
-					// 	]
-					// }
-				}
-			}
-		]
-	}
-}
+	resolveLoader: {
+		root: path.join(__dirname, 'node_modules')
+	},
+	plugins: [
+		new webpack.DefinePlugin({
+			__VERSION__: JSON.stringify(version)
+		})
+	]
+};
