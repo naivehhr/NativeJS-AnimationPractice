@@ -10,8 +10,9 @@ module.exports = {
 	output: {
 		path: __dirname + '/build',
 		filename: '[name].js',
-		library: 'newqueue',
-		libraryTarget: 'umd'
+		library: 'mq',
+		libraryTarget: 'umd',
+		publicPath: '/assets/'
 	},
 	module: {
 		rules: [
@@ -33,6 +34,15 @@ module.exports = {
 	plugins: [
 		new webpack.DefinePlugin({
 			__VERSION__: JSON.stringify(version)
-		})
-	]
+		}),
+		new webpack.HotModuleReplacementPlugin()
+	],
+	devServer: {
+		contentBase: './',
+		host: "0.0.0.0",
+		port: 9001,
+    inline: true,
+		progress : true,
+		colors:true
+	}
 };

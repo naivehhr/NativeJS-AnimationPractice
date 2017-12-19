@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["person"] = factory();
+		exports["newqueue"] = factory();
 	else
-		root["person"] = factory();
+		root["newqueue"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -80,33 +80,88 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
+var _newqueue = __webpack_require__(1);
+
+var _newqueue2 = _interopRequireDefault(_newqueue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_newqueue2.default.add(tt(1)).add(tt(22)).execute();
+
+function tt(i) {
+	return function () {
+		console.log('执行的任务=>' + i);
+	};
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Person = function () {
-	function Person() {
-		_classCallCheck(this, Person);
+var NewQueue = function () {
+	function NewQueue() {
+		_classCallCheck(this, NewQueue);
 
-		this.abbb = function (key) {
-			console.log('123');
-		};
-
-		this.age = 1;
-		this.salary = 100;
+		this.taskQueue = [];
+		this.taskID = 0;
 	}
 
-	_createClass(Person, [{
-		key: 'sayHello',
-		value: function sayHello() {
-			console.log('hello say by aran');
+	_createClass(NewQueue, [{
+		key: 'add',
+		value: function add(task) {
+			this.taskQueue.push(task);
+			return this;
+		}
+	}, {
+		key: 'execute',
+		value: function execute() {
+			if (this.taskQueue.length < 1) {
+				console.log('任务全部执行完毕');
+				return;
+			}
+			this.runTask();
+			return this;
+		}
+
+		// boundFunction = () => {
+		// 	return this.instanceProperty;
+		// }
+
+	}, {
+		key: 'runTask',
+		value: function runTask() {
+			if (this.taskID < this.taskQueue.length) {
+				var currenTask = this.taskQueue[this.taskID];
+				currenTask(); // 这里执行当前任务的回调呢
+				this.next(); // 默认都同步任务处理
+			} else {
+				console.log('任务全部执行完毕');
+			}
+		}
+	}, {
+		key: 'next',
+		value: function next() {
+			this.taskID++;
+			// var me = this
+			this.runTask();
 		}
 	}]);
 
-	return Person;
+	return NewQueue;
 }();
 
-module.exports = Person;
+function newQuen() {
+	return new NewQueue();
+}
+
+module.exports = new NewQueue();
 
 /***/ })
 /******/ ]);
